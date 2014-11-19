@@ -108,18 +108,19 @@ class ScoreListHandler(webapp2.RequestHandler):
 
 class ScoreHandler(webapp2.RequestHandler):
     def put(self, evaluator_key, presenter_key):
+        evaluator_key = ndb.Key(Evaluator, int(evaluator_key))
+        presenter_key = ndb.Key(Presenter, int(presenter_key))
         evaluator = checkauth(self.request.headers.get('Authorization'))
-        if evaluator is None:
+        print evaluator_key, evaluator.key
+        if evaluator is None or evaluator_key != evaluator.key:
             self.response.set_status(401)
             return
         data = json.loads(self.request.body)
-        print data
-        presenter_key = ndb.Key(Presenter, int(presenter_key))
-        score = Score.query(Score.evaluator == evaluator.key and
+        score = Score.query(Score.evaluator == evaluator_key,
                             Score.presenter == presenter_key).get()
         if score is None:
             score = Score()
-            score.evaluator = evaluator.key
+            score.evaluator = evaluator_key
             score.presenter = presenter_key
         score.score1 = int(data.get('score1'))
         score.score2 = int(data.get('score2'))
@@ -170,6 +171,13 @@ class AdminEvaluatorListHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(evaluator.to_dict()))
 
 
+class AdminScoreListHandler(webapp2.RequestHandler):
+    def get(self):
+        scores = Score.query()
+        data = [s.to_dict() for s in scores]
+        self.response.write(json.dumps(data))
+
+
 class AuthHandler(webapp2.RequestHandler):
     def get(self):
         dest_url = self.request.GET['dest_url']
@@ -192,6 +200,7 @@ app = webapp2.WSGIApplication([
     Route('/api/admin/evaluators', AdminEvaluatorListHandler),
     Route('/api/admin/evaluators/<evaluator_key:[\w\-]+>',
           AdminEvaluatorHandler),
+    Route('/api/admin/scores', AdminScoreListHandler),
     Route('/api/evaluators/<evaluator_key:[\w\-]+>', EvaluatorHandler),
     Route('/api/evaluators/<evaluator_key:[\w\-]+>'
           '/scores', ScoreListHandler),

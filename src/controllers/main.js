@@ -53,6 +53,7 @@ angular.module('sympo-score')
     updateScore(key) {
       this.scores[key].$update(score => {
         this.scores[key] = score;
+        alert('saved');
       }, () => {
         alert('error');
       });

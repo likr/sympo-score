@@ -9,26 +9,29 @@
   <div class="panel-body">
     <form ng-submit="main.updateScore(presenter.key)">
       <div class="form-group">
-        <label>口頭発表・討論は説得力があり論理的であったか</label>
+        <label ng-if="main.evaluator.type === 0">発表がわかりやすい (50%)</label>
+        <label ng-if="main.evaluator.type !== 0">口頭発表・討論に説得力があり論理的</label>
         <div>
           <label class="radio-inline" ng-repeat="point in main.points">
-            <input type="radio" ng-model="main.scores[presenter.key].score1" value="{{point.value}}"> {{point.label}}
+            <input type="radio" ng-model="main.scores[presenter.key].score1" value="{{point.value}}" name="score1" ng-required="$index === 0"> {{point.label}}
           </label>
         </div>
       </div>
       <div class="form-group">
-        <label>スライドは分かりやすいものであったか</label>
+        <label ng-if="main.evaluator.type === 0">科学的方法が実践されている (30%)</label>
+        <label ng-if="main.evaluator.type !== 0">スライドが分かりやすい</label>
         <div>
           <label class="radio-inline" ng-repeat="point in main.points">
-            <input type="radio" ng-model="main.scores[presenter.key].score2" value="{{point.value}}"> {{point.label}}
+            <input type="radio" ng-model="main.scores[presenter.key].score2" value="{{point.value}}" name="score2" ng-required="$index === 0"> {{point.label}}
           </label>
         </div>
       </div>
       <div class="form-group">
-        <label>発表及びアブストラクトの内容は科学的方法に基づいているか</label>
+        <label ng-if="main.evaluator.type === 0">投稿論文の質が高い (20%)</label>
+        <label ng-if="main.evaluator.type !== 0">発表及びアブストラクトの内容が科学的方法に基づいている</label>
         <div>
           <label class="radio-inline" ng-repeat="point in main.points">
-            <input type="radio" ng-model="main.scores[presenter.key].score3" value="{{point.value}}"> {{point.label}}
+            <input type="radio" ng-model="main.scores[presenter.key].score3" value="{{point.value}}" name="score3" ng-required="$index === 0"> {{point.label}}
           </label>
         </div>
       </div>

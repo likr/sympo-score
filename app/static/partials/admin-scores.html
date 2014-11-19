@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-xs-6">
+    <h3>発表者</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tr>
+          <th class="col-xs-6">氏名</th>
+          <th class="col-xs-6">スコア</th>
+        </tr>
+        <tr ng-repeat="presenter in ctl.presenters">
+          <td>{{presenter.name}}</td>
+          <td>{{ctl.presenterScores[presenter.key].length}} / {{ctl.evaluators.length}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <h3>評価者</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tr>
+          <th class="col-xs-6">氏名</th>
+          <th class="col-xs-6">スコア</th>
+        </tr>
+        <tr ng-repeat="evaluator in ctl.evaluators">
+          <td>{{evaluator.name}}</td>
+          <td>{{ctl.evaluatorScores[evaluator.key].length}} / {{ctl.presenters.length}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div>
+  <h3>スコア</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th class="col-xs-3">氏名</th>
+        <th class="col-xs-3" ng-repeat="type in ctl.evaluatorTypes">{{type.label}}</th>
+      </tr>
+      <tr ng-repeat="row in ctl.totalScores | orderBy:'ctl.evaluatorTypes[0].value':'true'">
+        <th>{{row.presenter.name}}</th>
+        <td ng-repeat="type in ctl.evaluatorTypes">{{row[type.value] | number}}</th>
+      </tr>
+    </table>
+  </div>
+</div>
