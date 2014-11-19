@@ -43,13 +43,6 @@ def checkauth(header):
     return evaluator
 
 
-class PresenterListHandler(webapp2.RequestHandler):
-    def get(self):
-        presenters = Presenter.query()
-        data = json.dumps([p.to_dict() for p in presenters])
-        self.response.write(data)
-
-
 class AdminPresenterHandler(webapp2.RequestHandler):
     def get(self, presenter_key):
         presenter = Presenter.get_by_id(int(presenter_key))
@@ -83,51 +76,6 @@ class AdminPresenterListHandler(webapp2.RequestHandler):
             title=data.get('title'))
         presenter.put()
         self.response.write(json.dumps(presenter.to_dict()))
-
-
-class EvaluatorHandler(webapp2.RequestHandler):
-    def get(self, evaluator_key):
-        evaluator = checkauth(self.request.headers.get('Authorization'))
-        if evaluator is None:
-            self.response.set_status(401)
-            return
-        data = json.dumps(evaluator.to_dict())
-        self.response.write(data)
-
-
-class ScoreListHandler(webapp2.RequestHandler):
-    def get(self, evaluator_key):
-        evaluator = checkauth(self.request.headers.get('Authorization'))
-        if evaluator is None:
-            self.response.set_status(401)
-            return
-        scores = Score.query(Score.evaluator == evaluator.key)
-        data = json.dumps([s.to_dict() for s in scores])
-        self.response.write(data)
-
-
-class ScoreHandler(webapp2.RequestHandler):
-    def put(self, evaluator_key, presenter_key):
-        evaluator_key = ndb.Key(Evaluator, int(evaluator_key))
-        presenter_key = ndb.Key(Presenter, int(presenter_key))
-        evaluator = checkauth(self.request.headers.get('Authorization'))
-        print evaluator_key, evaluator.key
-        if evaluator is None or evaluator_key != evaluator.key:
-            self.response.set_status(401)
-            return
-        data = json.loads(self.request.body)
-        score = Score.query(Score.evaluator == evaluator_key,
-                            Score.presenter == presenter_key).get()
-        if score is None:
-            score = Score()
-            score.evaluator = evaluator_key
-            score.presenter = presenter_key
-        score.score1 = int(data.get('score1'))
-        score.score2 = int(data.get('score2'))
-        score.score3 = int(data.get('score3'))
-        score.comment = data.get('comment')
-        score.put()
-        self.response.write(json.dumps(score.to_dict()))
 
 
 class AdminEvaluatorHandler(webapp2.RequestHandler):
@@ -178,6 +126,56 @@ class AdminScoreListHandler(webapp2.RequestHandler):
         self.response.write(json.dumps(data))
 
 
+class PresenterListHandler(webapp2.RequestHandler):
+    def get(self):
+        presenters = Presenter.query()
+        data = json.dumps([p.to_dict() for p in presenters])
+        self.response.write(data)
+
+
+class EvaluatorHandler(webapp2.RequestHandler):
+    def get(self):
+        evaluator = checkauth(self.request.headers.get('Authorization'))
+        if evaluator is None:
+            self.response.set_status(401)
+            return
+        data = json.dumps(evaluator.to_dict())
+        self.response.write(data)
+
+
+class ScoreListHandler(webapp2.RequestHandler):
+    def get(self):
+        evaluator = checkauth(self.request.headers.get('Authorization'))
+        if evaluator is None:
+            self.response.set_status(401)
+            return
+        scores = Score.query(Score.evaluator == evaluator.key)
+        data = json.dumps([s.to_dict() for s in scores])
+        self.response.write(data)
+
+
+class ScoreHandler(webapp2.RequestHandler):
+    def put(self, presenter_key):
+        presenter_key = ndb.Key(Presenter, int(presenter_key))
+        evaluator = checkauth(self.request.headers.get('Authorization'))
+        if evaluator is None:
+            self.response.set_status(401)
+            return
+        data = json.loads(self.request.body)
+        score = Score.query(Score.evaluator == evaluator.key,
+                            Score.presenter == presenter_key).get()
+        if score is None:
+            score = Score()
+            score.evaluator = evaluator.key
+            score.presenter = presenter_key
+        score.score1 = int(data.get('score1'))
+        score.score2 = int(data.get('score2'))
+        score.score3 = int(data.get('score3'))
+        score.comment = data.get('comment')
+        score.put()
+        self.response.write(json.dumps(score.to_dict()))
+
+
 class AuthHandler(webapp2.RequestHandler):
     def get(self):
         dest_url = self.request.GET['dest_url']
@@ -193,7 +191,6 @@ class AuthHandler(webapp2.RequestHandler):
 
 
 app = webapp2.WSGIApplication([
-    Route('/api/presenters', PresenterListHandler),
     Route('/api/admin/presenters', AdminPresenterListHandler),
     Route('/api/admin/presenters/<presenter_key:[\w\-]+>',
           AdminPresenterHandler),
@@ -201,10 +198,9 @@ app = webapp2.WSGIApplication([
     Route('/api/admin/evaluators/<evaluator_key:[\w\-]+>',
           AdminEvaluatorHandler),
     Route('/api/admin/scores', AdminScoreListHandler),
-    Route('/api/evaluators/<evaluator_key:[\w\-]+>', EvaluatorHandler),
-    Route('/api/evaluators/<evaluator_key:[\w\-]+>'
-          '/scores', ScoreListHandler),
-    Route('/api/evaluators/<evaluator_key:[\w\-]+>'
-          '/scores/<presenter_key:[\w\-]+>', ScoreHandler),
+    Route('/api/presenters', PresenterListHandler),
+    Route('/api/evaluators', EvaluatorHandler),
+    Route('/api/evaluators/scores', ScoreListHandler),
+    Route('/api/evaluators/scores/<presenter_key:[\w\-]+>', ScoreHandler),
     Route('/api/auth', AuthHandler),
 ], debug=True)

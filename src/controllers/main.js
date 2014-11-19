@@ -3,30 +3,26 @@ angular.module('sympo-score')
     $stateProvider.state('main', {
       controller: 'MainController as main',
       resolve: {
-        evaluator: ($stateParams, Evaluator) => {
-          return Evaluator
-            .get({
-              key: $stateParams.evaluatorKey
-            })
-            .$promise;
+        evaluator: (Evaluator) => {
+          return Evaluator.get().$promise;
         },
         presenters: (Presenter) => {
           return Presenter.query().$promise;
         },
-        scores: ($stateParams, Score) => {
-          return Score
-            .query({
-              evaluatorKey: $stateParams.evaluatorKey
-            })
-            .$promise;
+        scores: (Score) => {
+          return Score.query().$promise;
         }
       },
       templateUrl: 'partials/main.html',
-      url: '/:evaluatorKey'
+      url: '/'
     });
   })
   .controller('MainController', class {
-    constructor(Score, evaluator, presenters, scores) {
+    constructor($window, $http, $state, Score, evaluator, presenters, scores) {
+      this.$window = $window;
+      this.$http = $http;
+      this.$state = $state;
+
       this.evaluator = evaluator;
       this.presenters = presenters;
       this.scores = (() => {
@@ -43,10 +39,10 @@ angular.module('sympo-score')
         return obj;
       })();
       this.points = [
-        {value: 0, label: '当てはまらない'},
-        {value: 1, label: 'あまり当てはまらない'},
-        {value: 2, label: 'やや当てはまる'},
-        {value: 3, label: '当てはまる'}
+        {value: 0, label: 'Strongly disagree'},
+        {value: 1, label: 'Disagree'},
+        {value: 2, label: 'Agree'},
+        {value: 3, label: 'Strongly agree'}
       ];
     }
 
@@ -57,5 +53,11 @@ angular.module('sympo-score')
       }, () => {
         alert('error');
       });
+    }
+
+    logout() {
+      this.$window.localStorage.removeItem('hash');
+      this.$http.defaults.headers.common.Authorization = null;
+      this.$state.go('login');
     }
   });

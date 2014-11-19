@@ -1,5 +1,10 @@
 <div>
-  <h1>採点システム</h1>
+  <p class="text-right">
+    <a ng-click="main.logout()">Logout</a>
+  </p>
+</div>
+<div>
+  <h1>Voting System</h1>
   <h2>{{main.evaluator.name}}</h2>
 </div>
 <div class="panel panel-default" ng-repeat="presenter in main.presenters">
@@ -9,34 +14,35 @@
   <div class="panel-body">
     <form ng-submit="main.updateScore(presenter.key)">
       <div class="form-group">
-        <label ng-if="main.evaluator.type === 0">発表がわかりやすい (50%)</label>
-        <label ng-if="main.evaluator.type !== 0">口頭発表・討論に説得力があり論理的</label>
-        <div>
-          <label class="radio-inline" ng-repeat="point in main.points">
+        <label ng-if="main.evaluator.type === 0">The presentation is easy to understand. (50%)</label>
+        <label ng-if="main.evaluator.type !== 0">The presentation and the Q&amp;A session is logical.</label>
+        <div class="radio" ng-repeat="point in main.points | orderBy:'value':true">
+          <label>
             <input type="radio" ng-model="main.scores[presenter.key].score1" value="{{point.value}}" name="score1" ng-required="$index === 0"> {{point.label}}
           </label>
         </div>
       </div>
       <div class="form-group">
-        <label ng-if="main.evaluator.type === 0">科学的方法が実践されている (30%)</label>
-        <label ng-if="main.evaluator.type !== 0">スライドが分かりやすい</label>
-        <div>
-          <label class="radio-inline" ng-repeat="point in main.points">
+        <label ng-if="main.evaluator.type === 0">The scientfic method is practiced. (30%)</label>
+        <label ng-if="main.evaluator.type !== 0">The presentation slide is easy to understand.</label>
+        <div class="radio" ng-repeat="point in main.points | orderBy:'value':true">
+          <label>
             <input type="radio" ng-model="main.scores[presenter.key].score2" value="{{point.value}}" name="score2" ng-required="$index === 0"> {{point.label}}
           </label>
         </div>
       </div>
       <div class="form-group">
-        <label ng-if="main.evaluator.type === 0">投稿論文の質が高い (20%)</label>
-        <label ng-if="main.evaluator.type !== 0">発表及びアブストラクトの内容が科学的方法に基づいている</label>
-        <div>
-          <label class="radio-inline" ng-repeat="point in main.points">
+        <label ng-if="main.evaluator.type === 0">Quality of the submitted paper is high. (20%)</label>
+        <label ng-if="main.evaluator.type !== 0">The contents is based on the scientific method.</label>
+        <div class="radio" ng-repeat="point in main.points | orderBy:'value':true">
+          <label>
             <input type="radio" ng-model="main.scores[presenter.key].score3" value="{{point.value}}" name="score3" ng-required="$index === 0"> {{point.label}}
           </label>
         </div>
       </div>
       <div class="form-group">
-        <label>コメント</label>
+        <label>Comment</label>
+        <span class="help-block">Please write a comment that encourage the presenter.</span>
         <textarea class="form-control" row="5" required ng-model="main.scores[presenter.key].comment"></textarea>
       </div>
       <div class="form-group">

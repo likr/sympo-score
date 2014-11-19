@@ -7,13 +7,15 @@ angular.module('sympo-score')
     });
   })
   .controller('LoginController', class {
-    constructor($http, $state) {
+    constructor($window, $http, $state) {
+      this.$window = $window;
       this.$http = $http;
       this.$state = $state;
     }
 
     login() {
       var hash = btoa(`${this.evaluatorKey}:${this.password}`);
+      this.$window.localStorage.setItem('hash', hash);
       this.$http.defaults.headers.common.Authorization = `Basic ${hash}`;
       this.$state.go('main', {
         evaluatorKey: this.evaluatorKey

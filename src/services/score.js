@@ -1,7 +1,6 @@
 angular.module('sympo-score')
   .factory('Score', ($resource) => {
-    return $resource('/api/evaluators/:evaluatorKey/scores/:presenterKey', {
-      evaluatorKey: '@evaluatorKey',
+    return $resource('/api/evaluators/scores/:presenterKey', {
       presenterKey: '@presenterKey'
     }, {
       update: {
