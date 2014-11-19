@@ -1,0 +1,4 @@
+sympo-score
+===========
+
+Voting system
