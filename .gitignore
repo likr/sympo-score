@@ -1,0 +1,6 @@
+app/static/scripts/sympo-score.js
+app/static/scripts/lib
+app/static/styles/lib
+bower_components
+node_modules
+build

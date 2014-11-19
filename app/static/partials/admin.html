@@ -1,0 +1,60 @@
+<h2>Admin</h2>
+<div>
+  <h3>発表者</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th class="col-xs-3">氏名</th>
+        <th class="col-xs-3">所属</th>
+        <th class="col-xs-4">タイトル</th>
+        <th class="col-xs-2">操作</th>
+      </tr>
+      <tr ng-repeat="presenter in admin.presenters">
+        <td><input class="form-control" ng-model="presenter.name"></td>
+        <td><input class="form-control" ng-model="presenter.affiliation"></td>
+        <td><input class="form-control" ng-model="presenter.title"></td>
+        <td>
+          <button class="btn btn-default" ng-click="admin.updatePresenter($index)">Save</button>
+          <button class="btn btn-default" ng-click="admin.deletePresenter($index)">Delete</button>
+        </td>
+      </tr>
+      <tr>
+        <td><input class="form-control" ng-model="admin.newPresenter.name"></td>
+        <td><input class="form-control" ng-model="admin.newPresenter.affiliation"></td>
+        <td><input class="form-control" ng-model="admin.newPresenter.title"></td>
+        <td><button class="btn btn-default" ng-click="admin.submitPresenter()">Save</button></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div>
+  <h3>評価者</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th class="col-xs-2">ID</th>
+        <th class="col-xs-2">パスワード</th>
+        <th class="col-xs-4">氏名</th>
+        <th class="col-xs-2">タイプ</th>
+        <th class="col-xs-2">操作</th>
+      </tr>
+      <tr ng-repeat="evaluator in admin.evaluators">
+        <td>{{evaluator.key}}</td>
+        <td><input type="password" class="form-control" ng-model="evaluator.password"></td>
+        <td><input class="form-control" ng-model="evaluator.name"></td>
+        <td><select class="form-control" ng-model="evaluator.type" ng-options="type.value as type.label for type in admin.evaluatorTypes"></select></td>
+        <td>
+          <button class="btn btn-default" ng-click="admin.updateEvaluator($index)">Save</button>
+          <button class="btn btn-default" ng-click="admin.deleteEvaluator($index)">Delete</button>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="password" class="form-control" ng-model="admin.newEvaluator.password"></td>
+        <td><input class="form-control" ng-model="admin.newEvaluator.name"></td>
+        <td><select class="form-control" ng-model="admin.newEvaluator.type" ng-options="type.value as type.label for type in admin.evaluatorTypes"></select></td>
+        <td><button class="btn btn-default" ng-click="admin.submitEvaluator()">Save</button></td>
+      </tr>
+    </table>
+  </div>
+</div>

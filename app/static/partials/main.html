@@ -1,0 +1,45 @@
+<div>
+  <h1>採点システム</h1>
+  <h2>{{main.evaluator.name}}</h2>
+</div>
+<div class="panel panel-default" ng-repeat="presenter in main.presenters">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{presenter.title}} - {{presenter.name}} - {{presenter.affiliation}}</h3>
+  </div>
+  <div class="panel-body">
+    <form ng-submit="main.updateScore(presenter.key)">
+      <div class="form-group">
+        <label>口頭発表・討論は説得力があり論理的であったか</label>
+        <div>
+          <label class="radio-inline" ng-repeat="point in main.points">
+            <input type="radio" ng-model="main.scores[presenter.key].score1" value="{{point.value}}"> {{point.label}}
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>スライドは分かりやすいものであったか</label>
+        <div>
+          <label class="radio-inline" ng-repeat="point in main.points">
+            <input type="radio" ng-model="main.scores[presenter.key].score2" value="{{point.value}}"> {{point.label}}
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>発表及びアブストラクトの内容は科学的方法に基づいているか</label>
+        <div>
+          <label class="radio-inline" ng-repeat="point in main.points">
+            <input type="radio" ng-model="main.scores[presenter.key].score3" value="{{point.value}}"> {{point.label}}
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>コメント</label>
+        <textarea class="form-control" row="5" required ng-model="main.scores[presenter.key].comment"></textarea>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" ng-if="main.scores[presenter.key].key === undefined">Submit</button>
+        <button class="btn btn-default" ng-if="main.scores[presenter.key].key !== undefined">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
