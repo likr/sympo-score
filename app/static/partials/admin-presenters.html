@@ -3,12 +3,14 @@
   <div class="table-responsive">
     <table class="table table-bordered">
       <tr>
+        <th class="col-xs-2">発表順</th>
         <th class="col-xs-3">氏名</th>
         <th class="col-xs-2">所属</th>
         <th class="col-xs-3">タイトル</th>
         <th class="col-xs-2">操作</th>
       </tr>
       <tr ng-repeat="presenter in ctl.presenters">
+        <td><input class="form-control" ng-model="presenter.order"></td>
         <td><input class="form-control" ng-model="presenter.name"></td>
         <td><input class="form-control" ng-model="presenter.affiliation"></td>
         <td><input class="form-control" ng-model="presenter.title"></td>
@@ -18,6 +20,7 @@
         </td>
       </tr>
       <tr>
+        <td><input class="form-control" ng-model="ctl.newPresenter.order"></td>
         <td><input class="form-control" ng-model="ctl.newPresenter.name"></td>
         <td><input class="form-control" ng-model="ctl.newPresenter.affiliation"></td>
         <td><input class="form-control" ng-model="ctl.newPresenter.title"></td>

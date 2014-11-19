@@ -5,6 +5,7 @@ class Presenter(ndb.Model):
     name = ndb.StringProperty(required=True)
     affiliation = ndb.StringProperty(required=True)
     title = ndb.StringProperty(required=True)
+    order = ndb.IntegerProperty(required=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
     updated = ndb.DateTimeProperty(auto_now=True)
 
@@ -14,6 +15,7 @@ class Presenter(ndb.Model):
             'name': self.name,
             'affiliation': self.affiliation,
             'title': self.title,
+            'order': self.order,
             'created': self.created.strftime('%Y-%m-%dT%H:%M:%SZ'),
             'updated': self.updated.strftime('%Y-%m-%dT%H:%M:%SZ'),
         }

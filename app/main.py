@@ -55,6 +55,7 @@ class AdminPresenterHandler(webapp2.RequestHandler):
         presenter.name = data.get('name')
         presenter.affiliation = data.get('affiliation')
         presenter.title = data.get('title')
+        presenter.order = int(data.get('order'))
         presenter.put()
         self.response.write(json.dumps(presenter.to_dict()))
 
@@ -64,7 +65,7 @@ class AdminPresenterHandler(webapp2.RequestHandler):
 
 class AdminPresenterListHandler(webapp2.RequestHandler):
     def get(self):
-        presenters = Presenter.query()
+        presenters = Presenter.query().order(Presenter.order)
         data = json.dumps([p.to_dict() for p in presenters])
         self.response.write(data)
 
@@ -73,7 +74,8 @@ class AdminPresenterListHandler(webapp2.RequestHandler):
         presenter = Presenter(
             name=data.get('name'),
             affiliation=data.get('affiliation'),
-            title=data.get('title'))
+            title=data.get('title'),
+            order=int(data.get('order')))
         presenter.put()
         self.response.write(json.dumps(presenter.to_dict()))
 
@@ -128,7 +130,7 @@ class AdminScoreListHandler(webapp2.RequestHandler):
 
 class PresenterListHandler(webapp2.RequestHandler):
     def get(self):
-        presenters = Presenter.query()
+        presenters = Presenter.query().order(Presenter.order)
         data = json.dumps([p.to_dict() for p in presenters])
         self.response.write(data)
 
