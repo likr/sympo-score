@@ -25,6 +25,14 @@ angular.module('sympo-score')
 
       this.evaluator = evaluator;
       this.presenters = presenters;
+      this.changed = (() => {
+        var obj = {};
+        this.presenters.forEach(presenter => {
+          obj[presenter.key] = false;
+        });
+        return obj;
+      })();
+
       this.scores = (() => {
         var obj = {};
         this.presenters.forEach(presenter => {
@@ -46,9 +54,14 @@ angular.module('sympo-score')
       ];
     }
 
+    setDirty(key) {
+      this.changed[key] = true;
+    }
+
     updateScore(key) {
       this.scores[key].$update(score => {
         this.scores[key] = score;
+        this.changed[key] = false;
         alert('saved');
       }, () => {
         alert('error');

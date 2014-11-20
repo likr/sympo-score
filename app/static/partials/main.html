@@ -7,7 +7,7 @@
   <h1>Voting System</h1>
   <h2>{{main.evaluator.name}}</h2>
 </div>
-<div class="panel panel-default" ng-repeat="presenter in main.presenters">
+<div class="panel panel-default" ng-class="{'panel-primary': main.scores[presenter.key].key === undefined, 'panel-danger': main.scores[presenter.key].key !== undefined && main.changed[presenter.key]}" ng-repeat="presenter in main.presenters">
   <div class="panel-heading">
     <h3 class="panel-title">{{$index + 1}}. {{presenter.title}} - {{presenter.name}} - {{presenter.affiliation}}</h3>
   </div>
@@ -18,7 +18,7 @@
         <label ng-if="main.evaluator.type !== 0">The presentation and the Q&amp;A session are logical.</label>
         <div class="radio" ng-repeat="point in main.points | orderBy:'value':true">
           <label>
-            <input type="radio" ng-model="main.scores[presenter.key].score1" value="{{point.value}}" name="score1" ng-required="$index === 0"> {{point.label}}
+            <input type="radio" ng-model="main.scores[presenter.key].score1" value="{{point.value}}" name="score1" ng-required="$index === 0" ng-change="main.setDirty(presenter.key)"> {{point.label}}
           </label>
         </div>
       </div>
@@ -27,7 +27,7 @@
         <label ng-if="main.evaluator.type !== 0">The presentation slide are easy to understand.</label>
         <div class="radio" ng-repeat="point in main.points | orderBy:'value':true">
           <label>
-            <input type="radio" ng-model="main.scores[presenter.key].score2" value="{{point.value}}" name="score2" ng-required="$index === 0"> {{point.label}}
+            <input type="radio" ng-model="main.scores[presenter.key].score2" value="{{point.value}}" name="score2" ng-required="$index === 0" ng-change="main.setDirty(presenter.key)"> {{point.label}}
           </label>
         </div>
       </div>
@@ -36,14 +36,14 @@
         <label ng-if="main.evaluator.type !== 0">The contents are based on the scientific method.</label>
         <div class="radio" ng-repeat="point in main.points | orderBy:'value':true">
           <label>
-            <input type="radio" ng-model="main.scores[presenter.key].score3" value="{{point.value}}" name="score3" ng-required="$index === 0"> {{point.label}}
+            <input type="radio" ng-model="main.scores[presenter.key].score3" value="{{point.value}}" name="score3" ng-required="$index === 0" ng-change="main.setDirty(presenter.key)"> {{point.label}}
           </label>
         </div>
       </div>
       <div class="form-group">
         <label>Comment</label>
         <span class="help-block">Please write a comment that encourages the presenter.</span>
-        <textarea class="form-control" row="5" required ng-model="main.scores[presenter.key].comment"></textarea>
+        <textarea class="form-control" row="5" required ng-model="main.scores[presenter.key].comment" ng-change="main.setDirty(presenter.key)"></textarea>
       </div>
       <div class="form-group">
         <button class="btn btn-primary" ng-if="main.scores[presenter.key].key === undefined">Submit</button>
