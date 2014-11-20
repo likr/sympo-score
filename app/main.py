@@ -104,7 +104,7 @@ class AdminEvaluatorHandler(webapp2.RequestHandler):
 
 class AdminEvaluatorListHandler(webapp2.RequestHandler):
     def get(self):
-        evaluators = Evaluator.query()
+        evaluators = Evaluator.query().order(Evaluator.created)
         data = json.dumps([e.to_dict() for e in evaluators])
         self.response.write(data)
 
