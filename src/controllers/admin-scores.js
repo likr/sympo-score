@@ -27,7 +27,9 @@ angular.module('sympo-score')
           obj[evaluator.key] = {};
         });
         scores.forEach(score => {
-          obj[score.evaluatorKey][score.presenterKey] = score;
+          if (obj[score.evaluatorKey]) {
+            obj[score.evaluatorKey][score.presenterKey] = score;
+          }
         });
         return obj;
       })();
