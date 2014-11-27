@@ -81,6 +81,13 @@ angular.module('sympo-score')
             }
           }
         });
+        this.evaluatorTypes.forEach(type => {
+          result[type.value] /= this.evaluators
+            .filter(evaluator => {
+              return evaluator.type == type.value;
+            })
+            .length;
+        });
         return result;
       });
     }

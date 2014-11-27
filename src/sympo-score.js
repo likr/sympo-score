@@ -20,7 +20,7 @@ angular.module('sympo-score')
 
     $rootScope
       .$on('$stateChangeError', (event, toState, toParams, fromState, fromParams) => {
-        if (toState.name === 'admin') {
+        if (toState.name.startsWith('admin')) {
           $http.get('/api/auth', {
             params: {
               dest_url: '/#/admin/scores'
