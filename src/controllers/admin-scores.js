@@ -62,6 +62,12 @@ angular.module('sympo-score')
         return obj;
       })();
 
+      this.evaluators.forEach(evaluator => {
+        this.evaluatorScores[evaluator.key].forEach(score => {
+          score.type = evaluator.type;
+        });
+      });
+
       this.evaluatorTypes = evaluatorTypes;
 
       this.totalScores = this.presenters.map(presenter => {

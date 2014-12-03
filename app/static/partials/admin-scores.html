@@ -45,3 +45,23 @@
     </table>
   </div>
 </div>
+<div>
+  <h3>コメント</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th class="col-xs-3">氏名</th>
+        <th class="col-xs-9">コメント</th>
+      </tr>
+      <tr ng-repeat="presenter in ctl.presenters">
+        <th>{{presenter.name}}</th>
+        <th>
+          <div ng-repeat="type in ctl.evaluatorTypes">
+            <h4>{{type.label}}</h4>
+            <p ng-repeat="score in ctl.presenterScores[presenter.key] | filter:{type: type.value}" ng-bind-html="score.comment | newlines"></p>
+          </div>
+        </th>
+      </tr>
+    </table>
+  </div>
+</div>

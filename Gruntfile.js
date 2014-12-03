@@ -34,6 +34,7 @@ module.exports = function(grunt) {
           'build/sympo-score.js',
           'build/services/*.js',
           'build/directives/*.js',
+          'build/filters/*.js',
           'build/controllers/*.js'
         ],
         dest: 'app/static/scripts/sympo-score.js'
